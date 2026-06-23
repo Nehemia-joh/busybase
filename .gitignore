@@ -1,0 +1,22 @@
+# Environment — NEVER commit this
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+error_log
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# PHP temp
+/public_html/install.php
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
