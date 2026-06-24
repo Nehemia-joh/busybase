@@ -56,6 +56,16 @@ ServerSignature Off
     RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
     RewriteRule .* - [F,L]
 
+    # Redirect .php URLs to clean URLs (301)
+    RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
+    RewriteRule ^ /%1 [R=301,L,NE]
+
+    # Serve clean URLs — map /page to /page.php internally
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^(.+?)/?$ $1.php [L,QSA]
+
     # Redirect root to index
     RewriteRule ^$ index.php [L]
 </IfModule>

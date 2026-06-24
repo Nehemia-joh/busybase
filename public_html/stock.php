@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $branchId   = cleanInt($_POST['branch_id'] ?? 0) ?: null;
         $initQty    = cleanInt($_POST['initial_qty'] ?? 0);
 
-        if (!$name) { flash('error', 'Product name is required.'); header('Location: /stock.php?action=new'); exit; }
+        if (!$name) { flash('error', 'Product name is required.'); header('Location: /stock?action=new'); exit; }
 
         try {
             $db->prepare(
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             flash('error', str_contains($e->getMessage(),'Duplicate') ? 'SKU already exists.' : 'Error creating product: ' . $e->getMessage());
         }
-        header('Location: /stock.php'); exit;
+        header('Location: /stock'); exit;
     }
 
     // Edit product
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ->execute([$name,$sku,$barcode,$desc,$costPrice,$wholeSale,$retail,$minAlert,$isActive,$pid]);
         logActivity('product_updated', "Updated product: $name");
         flash('success', "Product '$name' updated.");
-        header('Location: /stock.php'); exit;
+        header('Location: /stock'); exit;
     }
 
     // Add stock to branch
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             flash('error', 'Please fill in all fields and enter a positive quantity.');
         }
-        header('Location: /stock.php'); exit;
+        header('Location: /stock'); exit;
     }
 
     // Adjust stock
@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ->execute([$pid,$bid,$before,$changed,$newQty,$reason,$u['id']]);
         logActivity('stock_adjusted', "Adjusted product ID $pid at branch $bid to $newQty");
         flash('success', 'Stock adjusted successfully.');
-        header('Location: /stock.php'); exit;
+        header('Location: /stock'); exit;
     }
 
     // Copy to branch
@@ -131,19 +131,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $toId   = cleanInt($_POST['to_branch_id'] ?? 0);
         $qty    = cleanInt($_POST['quantity'] ?? 0);
 
-        if ($fromId === $toId) { flash('error','Source and destination must be different.'); header('Location: /stock.php'); exit; }
+        if ($fromId === $toId) { flash('error','Source and destination must be different.'); header('Location: /stock'); exit; }
 
         $sourceStmt = $db->prepare('SELECT quantity FROM stock WHERE product_id=? AND branch_id=?');
         $sourceStmt->execute([$pid,$fromId]);
         $sourceQty = (int)($sourceStmt->fetchColumn() ?: 0);
 
-        if ($qty > $sourceQty) { flash('error',"Only $sourceQty units available in source branch."); header('Location: /stock.php'); exit; }
+        if ($qty > $sourceQty) { flash('error',"Only $sourceQty units available in source branch."); header('Location: /stock'); exit; }
 
         $db->prepare('UPDATE stock SET quantity = quantity - ? WHERE product_id=? AND branch_id=?')->execute([$qty,$pid,$fromId]);
         $db->prepare('INSERT INTO stock (product_id,branch_id,quantity) VALUES (?,?,?) ON DUPLICATE KEY UPDATE quantity=quantity+?')->execute([$pid,$toId,$qty,$qty]);
         logActivity('stock_transferred', "Transferred $qty units of product $pid from branch $fromId to $toId");
         flash('success', "$qty units transferred successfully.");
-        header('Location: /stock.php'); exit;
+        header('Location: /stock'); exit;
     }
 
     // Delete product
@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             logActivity('product_deleted', "Deleted product ID: $pid");
             flash('success', 'Product deleted.');
         }
-        header('Location: /stock.php'); exit;
+        header('Location: /stock'); exit;
     }
 }
 
@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $editProduct = null;
 if ($action === 'edit' && $editId) {
     $s = $db->prepare('SELECT * FROM products WHERE id = ?'); $s->execute([$editId]); $editProduct = $s->fetch();
-    if (!$editProduct) { header('Location: /stock.php'); exit; }
+    if (!$editProduct) { header('Location: /stock'); exit; }
 }
 
 // ── Stock List ────────────────────────────────────────────────────────────────

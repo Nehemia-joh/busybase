@@ -55,7 +55,7 @@ if (session_status() === PHP_SESSION_NONE) {
             $_SESSION['_ip'] = $_SERVER['REMOTE_ADDR'] ?? '';
         } elseif ($_SESSION['_ip'] !== ($_SERVER['REMOTE_ADDR'] ?? '')) {
             session_destroy();
-            header('Location: /login.php?reason=session');
+            header('Location: /login?reason=session');
             exit;
         }
     }
@@ -135,7 +135,7 @@ function isLoggedIn(): bool
 function requireLogin(): void
 {
     if (!isLoggedIn()) {
-        header('Location: /login.php');
+        header('Location: /login');
         exit;
     }
 }

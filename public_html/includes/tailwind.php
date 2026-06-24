@@ -90,7 +90,7 @@
 
     <!-- OVERVIEW -->
     <span class="nav-group-label" x-show="sidebarOpen" x-cloak>Overview</span>
-    <a href="/dashboard.php" class="nav-item <?= $cp==='dashboard.php'?'active':'' ?>">
+    <a href="/dashboard" class="nav-item <?= $cp==='dashboard.php'?'active':'' ?>">
       <span class="icon-badge bg-amber-400/15 text-amber-400"><i class="fas fa-th-large"></i></span>
       <span x-show="sidebarOpen" x-cloak class="truncate">Dashboard</span>
     </a>
@@ -102,21 +102,21 @@
     <?php endif; ?>
 
     <?php if (canManageUsers()): ?>
-    <a href="/users.php" class="nav-item <?= $cp==='users.php'?'active':'' ?>">
+    <a href="/users" class="nav-item <?= $cp==='users.php'?'active':'' ?>">
       <span class="icon-badge bg-violet-400/15 text-violet-400"><i class="fas fa-users"></i></span>
       <span x-show="sidebarOpen" x-cloak class="truncate">Users</span>
     </a>
     <?php endif; ?>
 
     <?php if (isSuperAdmin()): ?>
-    <a href="/zones.php" class="nav-item <?= $cp==='zones.php'?'active':'' ?>">
+    <a href="/zones" class="nav-item <?= $cp==='zones.php'?'active':'' ?>">
       <span class="icon-badge bg-teal-400/15 text-teal-400"><i class="fas fa-globe-africa"></i></span>
       <span x-show="sidebarOpen" x-cloak class="truncate">Zones</span>
     </a>
     <?php endif; ?>
 
     <?php if (canManageBranches()): ?>
-    <a href="/branches.php" class="nav-item <?= $cp==='branches.php'?'active':'' ?>">
+    <a href="/branches" class="nav-item <?= $cp==='branches.php'?'active':'' ?>">
       <span class="icon-badge bg-sky-400/15 text-sky-400"><i class="fas fa-store"></i></span>
       <span x-show="sidebarOpen" x-cloak class="truncate">Branches</span>
     </a>
@@ -127,13 +127,13 @@
     <span class="nav-group-label" x-show="sidebarOpen" x-cloak>Inventory &amp; Sales</span>
 
     <?php if (canManageStock()): ?>
-    <a href="/stock.php" class="nav-item <?= $cp==='stock.php'?'active':'' ?>">
+    <a href="/stock" class="nav-item <?= $cp==='stock.php'?'active':'' ?>">
       <span class="icon-badge bg-emerald-400/15 text-emerald-400"><i class="fas fa-boxes"></i></span>
       <span x-show="sidebarOpen" x-cloak class="truncate">Stock</span>
     </a>
     <?php endif; ?>
 
-    <a href="/sales.php" class="nav-item <?= $cp==='sales.php'?'active':'' ?>">
+    <a href="/sales" class="nav-item <?= $cp==='sales.php'?'active':'' ?>">
       <span class="icon-badge bg-orange-400/15 text-orange-400"><i class="fas fa-cash-register"></i></span>
       <span x-show="sidebarOpen" x-cloak class="truncate">Sales</span>
     </a>
@@ -143,12 +143,12 @@
     <div class="pt-1" x-show="sidebarOpen" x-cloak></div>
     <span class="nav-group-label" x-show="sidebarOpen" x-cloak>Procurement</span>
 
-    <a href="/suppliers.php" class="nav-item <?= $cp==='suppliers.php'?'active':'' ?>">
+    <a href="/suppliers" class="nav-item <?= $cp==='suppliers.php'?'active':'' ?>">
       <span class="icon-badge bg-cyan-400/15 text-cyan-400"><i class="fas fa-truck"></i></span>
       <span x-show="sidebarOpen" x-cloak class="truncate">Suppliers</span>
     </a>
 
-    <a href="/purchase_orders.php" class="nav-item <?= $cp==='purchase_orders.php'?'active':'' ?>">
+    <a href="/purchase_orders" class="nav-item <?= $cp==='purchase_orders.php'?'active':'' ?>">
       <span class="icon-badge bg-purple-400/15 text-purple-400"><i class="fas fa-file-invoice"></i></span>
       <span x-show="sidebarOpen" x-cloak class="truncate">Purchase Orders</span>
     </a>
@@ -158,7 +158,7 @@
     <?php if (isSuperAdmin()): ?>
     <div class="pt-1" x-show="sidebarOpen" x-cloak></div>
     <span class="nav-group-label" x-show="sidebarOpen" x-cloak>Settings</span>
-    <a href="/currency_settings.php" class="nav-item <?= $cp==='currency_settings.php'?'active':'' ?>">
+    <a href="/currency_settings" class="nav-item <?= $cp==='currency_settings.php'?'active':'' ?>">
       <span class="icon-badge bg-yellow-400/15 text-yellow-400"><i class="fas fa-coins"></i></span>
       <span x-show="sidebarOpen" x-cloak class="truncate">Currency</span>
     </a>
@@ -177,7 +177,7 @@
         <p class="text-sm font-semibold text-white truncate"><?= e($u['name']) ?></p>
         <p class="text-[.65rem] text-slate-400 capitalize truncate"><?= e(str_replace('_',' ',$u['role'])) ?></p>
       </div>
-      <a href="/logout.php" x-show="sidebarOpen" x-cloak
+      <a href="/logout" x-show="sidebarOpen" x-cloak
          class="flex-shrink-0 p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
          title="Sign out" onclick="return confirm('Sign out?')">
         <i class="fas fa-sign-out-alt text-xs"></i>
@@ -248,7 +248,7 @@
             <p class="text-xs text-slate-400"><?= e($u['username']) ?></p>
           </div>
           <div class="py-1.5 px-2">
-            <a href="/logout.php" onclick="return confirm('Sign out?')"
+            <a href="/logout" onclick="return confirm('Sign out?')"
                class="flex items-center gap-2.5 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-xl transition-colors">
               <i class="fas fa-sign-out-alt text-xs"></i> Sign Out
             </a>

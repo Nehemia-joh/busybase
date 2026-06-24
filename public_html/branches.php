@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email     = filter_var(clean($_POST['email'] ?? ''), FILTER_VALIDATE_EMAIL) ?: null;
         $isActive  = isset($_POST['is_active']) ? 1 : 0;
 
-        if (!$name) { flash('error', 'Branch name is required.'); header('Location: /branches.php?action=' . ($act === 'create' ? 'new' : "edit&id=$bid")); exit; }
+        if (!$name) { flash('error', 'Branch name is required.'); header('Location: /branches?action=' . ($act === 'create' ? 'new' : "edit&id=$bid")); exit; }
 
         if ($act === 'create') {
             $db->prepare('INSERT INTO branches (name,zone_id,manager_id,address,phone,email,is_active) VALUES (?,?,?,?,?,?,?)')->execute([$name,$zoneId,$managerId,$address,$phone,$email,$isActive]);
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             logActivity('branch_updated', "Updated branch: $name");
             flash('success', "Branch '$name' updated.");
         }
-        header('Location: /branches.php'); exit;
+        header('Location: /branches'); exit;
     }
 
     if ($act === 'delete') {
@@ -50,14 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             logActivity('branch_deleted', "Deleted branch ID: $bid");
             flash('success', 'Branch deleted.');
         }
-        header('Location: /branches.php'); exit;
+        header('Location: /branches'); exit;
     }
 }
 
 $editBranch = null;
 if ($action === 'edit' && $editId) {
     $s = $db->prepare('SELECT * FROM branches WHERE id = ?'); $s->execute([$editId]); $editBranch = $s->fetch();
-    if (!$editBranch) { header('Location: /branches.php'); exit; }
+    if (!$editBranch) { header('Location: /branches'); exit; }
 }
 
 $where  = ['1=1'];

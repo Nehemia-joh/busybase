@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             flash('error', 'Please fill in all required fields correctly.');
         } else {
             if ($act === 'create') {
-                if (!$password) { flash('error', 'Password is required.'); header('Location: /users.php?action=new'); exit; }
+                if (!$password) { flash('error', 'Password is required.'); header('Location: /users?action=new'); exit; }
                 $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => (int)(getenv('BCRYPT_COST') ?: 12)]);
                 try {
                     $db->prepare(
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 flash('success', "User '$fullName' updated successfully.");
             }
         }
-        header('Location: /users.php');
+        header('Location: /users');
         exit;
     }
 
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             logActivity('user_deleted', "Deactivated user: " . ($u2['full_name'] ?? $uid));
             flash('success', 'User deactivated successfully.');
         }
-        header('Location: /users.php');
+        header('Location: /users');
         exit;
     }
 }
@@ -100,7 +100,7 @@ if ($action === 'edit' && $editId) {
     $stmt = $db->prepare('SELECT * FROM users WHERE id = ?');
     $stmt->execute([$editId]);
     $editUser = $stmt->fetch();
-    if (!$editUser) { header('Location: /users.php'); exit; }
+    if (!$editUser) { header('Location: /users'); exit; }
 }
 
 // ── List ──────────────────────────────────────────────────────────────────────

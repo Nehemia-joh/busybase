@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (!$branchId || empty($items)) {
             flash('error', 'Please select a branch and add at least one item.');
-            header('Location: /sales.php?action=new'); exit;
+            header('Location: /sales?action=new'); exit;
         }
 
         $subtotal = 0;
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stockRow = $stockStmt->fetch();
             if (!$stockRow || (int)$stockRow['quantity'] < $qty) {
                 flash('error', "Insufficient stock for one or more products.");
-                header('Location: /sales.php?action=new'); exit;
+                header('Location: /sales?action=new'); exit;
             }
 
             $prodStmt = $db->prepare('SELECT name, sku FROM products WHERE id=?');
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
         }
 
-        if (empty($saleItems)) { flash('error','No valid items in sale.'); header('Location: /sales.php?action=new'); exit; }
+        if (empty($saleItems)) { flash('error','No valid items in sale.'); header('Location: /sales?action=new'); exit; }
 
         $total      = $subtotal - $discount;
         $invoiceNo  = generateInvoiceNo();
@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $db->rollBack();
             flash('error', 'Error processing sale: ' . $e->getMessage());
-            header('Location: /sales.php?action=new'); exit;
+            header('Location: /sales?action=new'); exit;
         }
     }
 
@@ -131,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->prepare('INSERT INTO customers (name,phone,email,type,created_by) VALUES (?,?,?,?,?)')->execute([$name,$phone,$email,$type,$u['id']]);
             flash('success', "Customer '$name' added.");
         }
-        header('Location: /sales.php?action=new'); exit;
+        header('Location: /sales?action=new'); exit;
     }
 }
 

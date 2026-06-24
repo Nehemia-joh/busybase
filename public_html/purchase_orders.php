@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $items       = $_POST['items'] ?? [];
 
         if (!$supplierId || !$branchId || empty($items)) {
-            flash('error', 'Please select supplier, branch, and add items.'); header('Location: /purchase_orders.php?action=new'); exit;
+            flash('error', 'Please select supplier, branch, and add items.'); header('Location: /purchase_orders?action=new'); exit;
         }
 
         $subtotal = 0;
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $poItems[] = ['product_id'=>$pid,'product_name'=>$prod['name'],'sku'=>$prod['sku'],'quantity_ordered'=>$qty,'unit_cost'=>$cost,'total_cost'=>$line];
         }
 
-        if (empty($poItems)) { flash('error','No valid items.'); header('Location: /purchase_orders.php?action=new'); exit; }
+        if (empty($poItems)) { flash('error','No valid items.'); header('Location: /purchase_orders?action=new'); exit; }
 
         $total   = $subtotal + $taxAmt + $shipping - $discount;
         $poNum   = generatePoNumber();
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $db->rollBack();
             flash('error','Error creating PO: ' . $e->getMessage());
-            header('Location: /purchase_orders.php?action=new'); exit;
+            header('Location: /purchase_orders?action=new'); exit;
         }
     }
 
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $poId   = cleanInt($_POST['po_id'] ?? 0);
         $status = clean($_POST['status'] ?? '');
         $valid  = ['draft','pending','approved','ordered','received','cancelled'];
-        if (!in_array($status, $valid)) { flash('error','Invalid status.'); header('Location: /purchase_orders.php'); exit; }
+        if (!in_array($status, $valid)) { flash('error','Invalid status.'); header('Location: /purchase_orders'); exit; }
 
         if ($status === 'approved') {
             $db->prepare('UPDATE purchase_orders SET status=?, approved_by=? WHERE id=?')->execute([$status,$u['id'],$poId]);

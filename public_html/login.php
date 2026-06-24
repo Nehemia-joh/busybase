@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/config.php';
 
-if (isLoggedIn()) { header('Location: /dashboard.php'); exit; }
+if (isLoggedIn()) { header('Location: /dashboard'); exit; }
 
 $error   = '';
 $success = '';
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['_ip']       = $ip;
             getDB()->prepare('UPDATE users SET last_login=NOW() WHERE id=?')->execute([$user['id']]);
             logActivity('login', 'User signed in', (int)$user['id']);
-            header('Location: /dashboard.php'); exit;
+            header('Location: /dashboard'); exit;
         } else {
             recordRateAttempt($rateKey);
             try { getDB()->prepare('INSERT INTO failed_logins (username,ip_address) VALUES (?,?)')->execute([$username,$ip]); } catch (PDOException) {}

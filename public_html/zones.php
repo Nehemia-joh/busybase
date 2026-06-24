@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $description = clean($_POST['description'] ?? '');
         $managerId   = cleanInt($_POST['manager_id'] ?? 0) ?: null;
 
-        if (!$name) { flash('error', 'Zone name is required.'); header('Location: /zones.php?action=' . ($act === 'create' ? 'new' : "edit&id=$zid")); exit; }
+        if (!$name) { flash('error', 'Zone name is required.'); header('Location: /zones?action=' . ($act === 'create' ? 'new' : "edit&id=$zid")); exit; }
 
         if ($act === 'create') {
             $db->prepare('INSERT INTO zones (name, description, manager_id) VALUES (?,?,?)')->execute([$name,$description,$managerId]);
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             logActivity('zone_updated', "Updated zone: $name");
             flash('success', "Zone '$name' updated.");
         }
-        header('Location: /zones.php'); exit;
+        header('Location: /zones'); exit;
     }
 
     if ($act === 'delete') {
@@ -44,14 +44,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             logActivity('zone_deleted', "Deleted zone ID: $zid");
             flash('success', 'Zone deleted.');
         }
-        header('Location: /zones.php'); exit;
+        header('Location: /zones'); exit;
     }
 }
 
 $editZone = null;
 if ($action === 'edit' && $editId) {
     $s = $db->prepare('SELECT * FROM zones WHERE id = ?'); $s->execute([$editId]); $editZone = $s->fetch();
-    if (!$editZone) { header('Location: /zones.php'); exit; }
+    if (!$editZone) { header('Location: /zones'); exit; }
 }
 
 $zones = $db->query(

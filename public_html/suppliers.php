@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $status      = clean($_POST['status'] ?? 'active');
         $notes       = clean($_POST['notes'] ?? '');
 
-        if (!$name) { flash('error','Supplier name is required.'); header('Location: /suppliers.php?action=' . ($act==='create'?'new':"edit&id=$sid")); exit; }
+        if (!$name) { flash('error','Supplier name is required.'); header('Location: /suppliers?action=' . ($act==='create'?'new':"edit&id=$sid")); exit; }
 
         if ($act === 'create') {
             $db->prepare('INSERT INTO suppliers (name,company_name,contact_person,phone,email,address,tax_id,payment_terms,status,notes) VALUES (?,?,?,?,?,?,?,?,?,?)')->execute([$name,$company,$contact,$phone,$email,$address,$taxId,$payTerms,$status,$notes]);
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             logActivity('supplier_updated', "Updated supplier: $name");
             flash('success', "Supplier '$name' updated.");
         }
-        header('Location: /suppliers.php'); exit;
+        header('Location: /suppliers'); exit;
     }
 
     if ($act === 'delete') {
@@ -49,14 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             logActivity('supplier_deleted', "Deleted supplier ID: $sid");
             flash('success', 'Supplier deleted.');
         }
-        header('Location: /suppliers.php'); exit;
+        header('Location: /suppliers'); exit;
     }
 }
 
 $editSupplier = null;
 if ($action === 'edit' && $editId) {
     $s = $db->prepare('SELECT * FROM suppliers WHERE id=?'); $s->execute([$editId]); $editSupplier = $s->fetch();
-    if (!$editSupplier) { header('Location: /suppliers.php'); exit; }
+    if (!$editSupplier) { header('Location: /suppliers'); exit; }
 }
 
 $search = clean($_GET['q'] ?? '');

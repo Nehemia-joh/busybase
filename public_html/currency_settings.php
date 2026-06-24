@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     logActivity('currency_updated', "Currency settings updated: $symbol ($code)");
     flash('success', 'Currency settings saved.');
-    header('Location: /currency_settings.php'); exit;
+    header('Location: /currency_settings'); exit;
 }
 
 $settings = getCurrencySettings();
